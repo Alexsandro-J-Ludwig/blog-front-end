@@ -1,4 +1,3 @@
-import logo from "./../../assets/images/63089224fcb9ed23685b1ae15cc14680-logotipo-do-blog.png"
 import { Link } from "react-router-dom"
 import styles from "./Header.module.css"
 
@@ -11,6 +10,10 @@ export function Header() {
                 <div className={styles['navbar']}>
                     <Link className="link" to="/" style={{ textDecoration: "none" }}>
                         <text className={styles["title"]}>BlogU</text>
+                    </Link>
+
+                    <Link className="linkCadastro" to="/register" style={{ textDecoration: "none" }}>
+                        <text className={styles["textRegister"]}>Cadastro</text>
                     </Link>
                 </div>
             </header>

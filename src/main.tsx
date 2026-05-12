@@ -3,12 +3,17 @@ import './index.css'
 import { Main } from './pages/menu/menu'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import React from 'react';
+import { RegisterPage } from "./pages/register-page/registerPage";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Main />,
   },
+  {
+    path: "/register",
+    element: <RegisterPage />
+  }
 ]);
 
 const rootElement = document.getElementById("root");
