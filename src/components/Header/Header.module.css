@@ -25,3 +25,11 @@ header {
     letter-spacing: 0.5px;
     text-shadow: 0 0 8px rgba(0, 229, 255, 0.3); 
 }
+
+.textRegister {
+    color: white;
+    font-family: 'Pacifico', cursive; 
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+    text-shadow: 0 0 8px rgba(0, 229, 255, 0.3); 
+}
