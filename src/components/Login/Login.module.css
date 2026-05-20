@@ -1,0 +1,28 @@
+.container {
+    align-items: center;
+    position: relative;
+    margin: 50px auto;
+    background-color: rgb(49, 49, 49);
+    width: 500px;
+    height: 500px;
+    border-radius: 20px;
+}
+
+.titleContainer {
+    background-color: rgb(44, 44, 44);
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    text-align: center;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.titleText {
+    color: white;
+    font-family: 'Pacifico', cursive; 
+    font-size: 2rem;    
+    letter-spacing: 0.5px;
+    text-shadow: 0 0 8px rgba(0, 229, 255, 0.3); 
+}
