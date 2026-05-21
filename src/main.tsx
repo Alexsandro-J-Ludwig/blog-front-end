@@ -5,6 +5,7 @@ import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom'
 import React from 'react';
 import { RegisterPage } from "./pages/register-page/RegisterPage";
 import { ProfilePage } from "./pages/profile/Profile";
+import { GoodbyePage } from "./pages/goodbye/Goodbye";
 import { getUserFromToken } from "./utils/loginVerify";
 
 function ProfileRedirect() {
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
   {
     path: "/profile",
     element: <ProfileRedirect />
+  },
+  {
+    path: "/goodbye",
+    element: <GoodbyePage />
   }
 ]);
 
