@@ -1,0 +1,58 @@
+.loadingContainer,
+.errorContainer,
+.emptyContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    background-color: #1e1e1e;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    gap: 20px;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 3px solid rgba(0, 229, 255, 0.1);
+    border-top: 3px solid #00e5ff;
+    border-radius: 50%;
+    animation: spin 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.errorText {
+    color: #ff4c4c;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.retryBtn {
+    background: transparent;
+    border: 1px solid #00e5ff;
+    color: #00e5ff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.retryBtn:hover {
+    background-color: rgba(0, 229, 255, 0.1);
+    box-shadow: 0 0 15px rgba(0, 229, 255, 0.2);
+}
+
+.emptyText {
+    color: #888888;
+    font-size: 1.1rem;
+}
