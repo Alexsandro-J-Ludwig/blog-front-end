@@ -12,7 +12,7 @@ export function PostList() {
         setLoading(true);
         setError(null);
         try {
-            const response = await fetch("http://localhost:3000/post/getAll");
+            const response = await fetch(`${process.env.URL_API}/post/getAll`);
             if (!response.ok) {
                 throw new Error("Não foi possível carregar os posts. Tente novamente mais tarde.");
             }
@@ -29,13 +29,17 @@ export function PostList() {
     useEffect(() => {
         fetchPosts();
 
-        const handleNewPost = () => {
+        const handleFeedChange = () => {
             fetchPosts();
         };
 
-        window.addEventListener("post-created", handleNewPost);
+        window.addEventListener("post-created", handleFeedChange);
+        window.addEventListener("post-updated", handleFeedChange);
+        window.addEventListener("post-deleted", handleFeedChange);
         return () => {
-            window.removeEventListener("post-created", handleNewPost);
+            window.removeEventListener("post-created", handleFeedChange);
+            window.removeEventListener("post-updated", handleFeedChange);
+            window.removeEventListener("post-deleted", handleFeedChange);
         };
     }, []);
 

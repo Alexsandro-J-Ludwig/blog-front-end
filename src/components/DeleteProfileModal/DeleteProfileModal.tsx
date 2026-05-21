@@ -63,7 +63,7 @@ export function DeleteProfileModal({ isOpen, onClose, userPosts }: DeleteProfile
             for (let i = 0; i < userPosts.length; i++) {
                 const post = userPosts[i];
                 
-                const response = await fetch(`http://localhost:3000/post/${post.uuid}`, {
+                const response = await fetch(`${process.env.URL_API}/post/${post.uuid}`, {
                     method: "DELETE",
                     headers: {
                         "Authorization": `Bearer ${token}`
@@ -86,7 +86,7 @@ export function DeleteProfileModal({ isOpen, onClose, userPosts }: DeleteProfile
             // Longer wait for the profile deletion visual feel
             await sleep(1500);
 
-            const response = await fetch("http://localhost:3000/users/delete", {
+            const response = await fetch(`${process.env.URL_API}/users/delete`, {
                 method: "DELETE",
                 headers: {
                     "Authorization": `Bearer ${token}`

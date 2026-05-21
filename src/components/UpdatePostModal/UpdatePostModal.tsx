@@ -1,20 +1,34 @@
 import { useState, useEffect } from "react";
 import { getUserFromToken } from "../../utils/loginVerify";
 import { Toast } from "../Toast/Toast";
-import styles from "./CreatePostModal.module.css";
+import styles from "./UpdatePostModal.module.css";
+import type { PostData } from "../PostCard/PostCard";
 
-interface CreatePostModalProps {
+interface UpdatePostModalProps {
+    post: PostData;
     isOpen: boolean;
     onClose: () => void;
+    onUpdateSuccess: () => void;
 }
 
-export function CreatePostModal({ isOpen, onClose }: CreatePostModalProps) {
+export function UpdatePostModal({ post, isOpen, onClose, onUpdateSuccess }: UpdatePostModalProps) {
     const [title, setTitle] = useState("");
     const [describe, setDescribe] = useState("");
     const [imageFile, setImageFile] = useState<File | null>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
+
+    // Populate the form fields when the modal opens or when post changes
+    useEffect(() => {
+        if (isOpen && post) {
+            setTitle(post.title || "");
+            setDescribe(post.describe || "");
+            setImageFile(null);
+            setImagePreview(post.image || null);
+            setToast(null);
+        }
+    }, [isOpen, post]);
 
     // Prevent body scrolling when modal is open
     useEffect(() => {
@@ -99,19 +113,29 @@ export function CreatePostModal({ isOpen, onClose }: CreatePostModalProps) {
         setIsSubmitting(true);
 
         try {
-            const imageBase64 = imageFile ? await fileToBase64(imageFile) : "";
+            // Determine image payload
+            let finalImage = post.image || "";
+            if (imageFile) {
+                finalImage = await fileToBase64(imageFile);
+            } else if (imagePreview === null) {
+                // If preview was cleared/removed, we send empty string
+                finalImage = "";
+            }
+
             const token = localStorage.getItem("token");
 
-            const response = await fetch(`${process.env.URL_API}/post/create`, {
-                method: "POST",
+            // PUT ${process.env.URL_API}/post/alterPost{uuidPost}
+            // Note: no slash between alterPost and post.uuid
+            const response = await fetch(`${process.env.URL_API}/post/alterPost${post.uuid}`, {
+                method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`
                 },
                 body: JSON.stringify({
-                    title,
-                    describe,
-                    image: imageBase64
+                    title: title.trim(),
+                    describe: describe.trim(),
+                    image: finalImage
                 })
             });
 
@@ -120,21 +144,14 @@ export function CreatePostModal({ isOpen, onClose }: CreatePostModalProps) {
             if (!response.ok) {
                 const errorMessage = Array.isArray(data.message)
                     ? data.message.join(", ")
-                    : (data.message || "Erro ao publicar o post.");
+                    : (data.message || "Erro ao atualizar o post.");
                 throw new Error(errorMessage);
             }
 
-            // Dispatch event to notify PostList to reload
-            window.dispatchEvent(new Event("post-created"));
+            // Dispatch event to notify feed/profile list to reload
+            window.dispatchEvent(new Event("post-updated"));
 
-            // Reset form
-            setTitle("");
-            setDescribe("");
-            setImageFile(null);
-            setImagePreview(null);
-
-            // Toast success will be displayed on the page
-            // We close the modal after a tiny delay so they can see success or close immediately
+            onUpdateSuccess();
             onClose();
         } catch (err: any) {
             console.error(err);
@@ -148,7 +165,7 @@ export function CreatePostModal({ isOpen, onClose }: CreatePostModalProps) {
         <div className={styles.modalOverlay} onClick={onClose}>
             <div className={styles.modalCard} onClick={(e) => e.stopPropagation()}>
                 <div className={styles.modalHeader}>
-                    <h2 className={styles.modalTitle}>Novo Post</h2>
+                    <h2 className={styles.modalTitle}>Atualizar Post</h2>
                     <button className={styles.closeHeaderBtn} onClick={onClose} aria-label="Fechar">
                         &times;
                     </button>
@@ -156,12 +173,12 @@ export function CreatePostModal({ isOpen, onClose }: CreatePostModalProps) {
 
                 <form onSubmit={handleSubmit} className={styles.modalForm}>
                     <div className={styles.inputGroup}>
-                        <label htmlFor="post-title" className={styles.label}>Título</label>
+                        <label htmlFor="edit-post-title" className={styles.label}>Título</label>
                         <input
-                            id="post-title"
+                            id="edit-post-title"
                             type="text"
                             className={styles.input}
-                            placeholder="Digite o título do seu post (mín. 3 caracteres)"
+                            placeholder="Digite o título do seu post (mín. 5 caracteres)"
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
                             required
@@ -171,9 +188,9 @@ export function CreatePostModal({ isOpen, onClose }: CreatePostModalProps) {
                     </div>
 
                     <div className={styles.inputGroup}>
-                        <label htmlFor="post-describe" className={styles.label}>Descrição</label>
+                        <label htmlFor="edit-post-describe" className={styles.label}>Descrição</label>
                         <textarea
-                            id="post-describe"
+                            id="edit-post-describe"
                             className={`${styles.input} ${styles.textarea}`}
                             placeholder="Escreva a descrição do post (mín. 2 e máx. 500 caracteres)"
                             value={describe}
@@ -189,7 +206,7 @@ export function CreatePostModal({ isOpen, onClose }: CreatePostModalProps) {
                         <label className={styles.label}>Imagem de Capa (Opcional)</label>
                         <div className={styles.fileInputContainer}>
                             <input
-                                id="post-image"
+                                id="edit-post-image"
                                 type="file"
                                 accept="image/*"
                                 className={styles.fileInput}
@@ -198,12 +215,23 @@ export function CreatePostModal({ isOpen, onClose }: CreatePostModalProps) {
                                 autoComplete="off"
                             />
                             <span className={styles.fileInputLabel}>
-                                {imageFile ? imageFile.name : "Selecionar imagem..."}
+                                {imageFile ? imageFile.name : "Selecionar nova imagem..."}
                             </span>
                         </div>
                         {imagePreview && (
                             <div className={styles.previewContainer}>
                                 <img src={imagePreview} alt="Preview" className={styles.imagePreview} />
+                                <button 
+                                    type="button" 
+                                    className={styles.removeImageBtn} 
+                                    onClick={() => {
+                                        setImageFile(null);
+                                        setImagePreview(null);
+                                    }}
+                                    title="Remover Imagem"
+                                >
+                                    Remover
+                                </button>
                             </div>
                         )}
                     </div>
@@ -222,7 +250,7 @@ export function CreatePostModal({ isOpen, onClose }: CreatePostModalProps) {
                             className={styles.publishBtn}
                             disabled={isSubmitting}
                         >
-                            {isSubmitting ? "Publicando..." : "Publicar"}
+                            {isSubmitting ? "Salvando..." : "Salvar Alterações"}
                         </button>
                     </div>
                 </form>

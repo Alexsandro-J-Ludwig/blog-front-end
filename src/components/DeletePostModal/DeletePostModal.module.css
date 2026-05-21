@@ -1,0 +1,148 @@
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.modalCard {
+    background: rgba(22, 11, 14, 0.95);
+    border: 1px solid rgba(255, 82, 82, 0.3);
+    border-radius: 16px;
+    padding: 32px;
+    width: 90%;
+    max-width: 480px;
+    box-shadow: 
+        0 10px 40px rgba(0, 0, 0, 0.8),
+        0 0 30px rgba(255, 82, 82, 0.15);
+    animation: slideUp 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    color: #e0e0e0;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 82, 82, 0.15);
+    padding-bottom: 16px;
+}
+
+.warningIcon {
+    color: #ff5252;
+    width: 28px;
+    height: 28px;
+    filter: drop-shadow(0 0 5px rgba(255, 82, 82, 0.6));
+}
+
+.title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.content {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #ccc;
+    margin-bottom: 24px;
+}
+
+.question {
+    font-size: 1.1rem;
+    margin-bottom: 12px;
+}
+
+.postTitle {
+    color: #00e5ff;
+    font-weight: 600;
+    text-shadow: 0 0 5px rgba(0, 229, 255, 0.2);
+}
+
+.subtext {
+    font-size: 0.88rem;
+    color: #888888;
+}
+
+.errorBox {
+    background: rgba(255, 82, 82, 0.05);
+    border-left: 4px solid #ff5252;
+    padding: 12px;
+    border-radius: 4px;
+    margin-top: 16px;
+    font-size: 0.88rem;
+    color: #ffab91;
+}
+
+.btnGroup {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.cancelBtn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #ccc;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.cancelBtn:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.deleteBtn {
+    background: rgba(255, 82, 82, 0.1);
+    border: 1px solid #ff5252;
+    color: #ff5252;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 0 10px rgba(255, 82, 82, 0.1);
+}
+
+.deleteBtn:hover:not(:disabled) {
+    background: #ff5252;
+    color: #fff;
+    box-shadow: 0 0 15px rgba(255, 82, 82, 0.4);
+}
+
+.deleteBtn:disabled, .cancelBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
