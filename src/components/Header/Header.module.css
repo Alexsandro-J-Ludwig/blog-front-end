@@ -20,8 +20,92 @@ header {
 
 .title {
     color: white;
-    font-family: 'Pacifico', cursive; 
+    font-family: 'Pacifico', cursive;
     font-size: 2rem;
     letter-spacing: 0.5px;
-    text-shadow: 0 0 8px rgba(0, 229, 255, 0.3); 
+    text-shadow: 0 0 8px rgba(0, 229, 255, 0.3);
+}
+
+/* 🛠️ A MÁGICA ACONTECE AQUI */
+.linkCadastro {
+    margin-left: auto;
+    /* Empurra o link e o texto para o lado oposto */
+}
+
+.textRegister {
+    color: white;
+    font-family: 'Pacifico', cursive;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+    text-shadow: 0 0 8px rgba(0, 229, 255, 0.3);
+}
+
+.avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1.5px solid #00e5ff;
+    box-shadow: 0 0 5px rgba(0, 229, 255, 0.4);
+    transition: transform 0.2s ease;
+}
+
+.avatar:hover {
+    transform: scale(1.1);
+}
+
+.userSection {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.logoutBtn {
+    background: transparent;
+    border: 1.5px solid rgba(255, 82, 82, 0.5);
+    border-radius: 20px;
+    color: #ff5252;
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 6px 16px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: 0 0 5px rgba(255, 82, 82, 0.1);
+}
+
+.logoutBtn:hover {
+    background-color: rgba(255, 82, 82, 0.1);
+    border-color: #ff5252;
+    box-shadow: 0 0 10px rgba(255, 82, 82, 0.3);
+    transform: translateY(-1px);
+}
+
+.logoutBtn:active {
+    transform: translateY(0);
+}
+
+.newPostBtn {
+    background: linear-gradient(135deg, #00e5ff 0%, #00838f 100%);
+    border: none;
+    border-radius: 20px;
+    color: #121212;
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 6px 16px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: 0 0 5px rgba(0, 229, 255, 0.2);
+}
+
+.newPostBtn:hover {
+    box-shadow: 0 0 15px rgba(0, 229, 255, 0.5);
+    transform: translateY(-1px);
+    filter: brightness(1.1);
+}
+
+.newPostBtn:active {
+    transform: translateY(0);
 }
