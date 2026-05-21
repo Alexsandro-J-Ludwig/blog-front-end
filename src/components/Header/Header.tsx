@@ -38,7 +38,7 @@ export function Header() {
                             <button onClick={() => setIsModalOpen(true)} className={styles["newPostBtn"]}>
                                 + Novo Post
                             </button>
-                            <Link className={styles["linkCadastro"]} to="/profile" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: "10px" }}>
+                            <Link className={styles["linkCadastro"]} to={`/profile/${user.username}`} style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: "10px" }}>
                                 <img 
                                     src={user.image} 
                                     alt={user.username} 
