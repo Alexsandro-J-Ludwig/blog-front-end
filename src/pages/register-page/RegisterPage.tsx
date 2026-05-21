@@ -1,40 +1,14 @@
 import { Header } from "../../components/Header/Header";
+import { Login } from "../../components/Login/Login";
+import styles from "./RegisterPage.module.css";
 
 export function RegisterPage() {
     return (
-        <>
+        <div className={styles.pageContainer}>
             <Header />
-
-            <section>
-                <div>
-                    <text>Cadastro de usuário</text>
-                </div>
-
-                <div>
-                    <label>
-                        Nome de Usuário:
-                    </label>
-                    <input />
-                </div>
-                <div>
-                    <label>
-                        Email:
-                    </label>
-                    <input />
-                </div>
-                <div>
-                    <label>
-                        Senha:
-                    </label>
-                    <input />
-                </div>
-                <div>
-                    <label>
-                        Foto de Perfil (opcional):
-                    </label>
-                    <input type="file"/>
-                </div>
-            </section>
-        </>
-    )
-}
+            <main className={styles.pageWrapper}>
+                <Login />
+            </main>
+        </div>
+    );
+}   

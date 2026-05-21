@@ -3,7 +3,7 @@ import './index.css'
 import { Main } from './pages/menu/menu'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import React from 'react';
-import { RegisterPage } from "./pages/register-page/registerPage";
+import { RegisterPage } from "./pages/register-page/RegisterPage";
 
 const router = createBrowserRouter([
   {
