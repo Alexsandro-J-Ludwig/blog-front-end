@@ -12,6 +12,14 @@ export function Header() {
 
     useEffect(() => {
         setUser(getUserFromToken());
+
+        const handleUpdate = () => {
+            setUser(getUserFromToken());
+        };
+        window.addEventListener("profile-updated", handleUpdate);
+        return () => {
+            window.removeEventListener("profile-updated", handleUpdate);
+        };
     }, []);
 
     const handleLogout = () => {
