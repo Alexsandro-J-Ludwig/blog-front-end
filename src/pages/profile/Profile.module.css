@@ -322,6 +322,43 @@
     height: 14px;
 }
 
+.dangerZone {
+    margin-top: 60px;
+    padding-top: 30px;
+    border-top: 1px dashed rgba(255, 82, 82, 0.2);
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.deleteProfileBtn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 82, 82, 0.03);
+    border: 1px solid rgba(255, 82, 82, 0.2);
+    color: #ff8a80;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+.deleteProfileBtn:hover {
+    background: rgba(255, 82, 82, 0.15);
+    border-color: #ff5252;
+    color: #ffffff;
+    box-shadow: 0 0 15px rgba(255, 82, 82, 0.3);
+}
+
+.trashIcon {
+    width: 14px;
+    height: 14px;
+}
+
 /* Responsiveness overrides */
 @media (max-width: 768px) {
     .cover {

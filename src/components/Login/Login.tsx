@@ -33,7 +33,7 @@ export function Login() {
         setIsSubmitting(true);
 
         try {
-            const response = await fetch("http://localhost:3000/users/login", {
+            const response = await fetch(`${process.env.URL_API}/users/login`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -75,7 +75,7 @@ export function Login() {
                 imageStr = `https://api.dicebear.com/7.x/avataaars/svg?seed=${registerUsername}`;
             }
 
-            const response = await fetch("http://localhost:3000/users/create", {
+            const response = await fetch(`${process.env.URL_API}/users/create`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

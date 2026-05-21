@@ -5,6 +5,7 @@ import { PostCard } from "../../components/PostCard/PostCard";
 import { getUserFromToken } from "../../utils/loginVerify";
 import type { PostData } from "../../components/PostCard/PostCard";
 import { UpdateProfileModal } from "../../components/UpdateProfileModal/UpdateProfileModal";
+import { DeleteProfileModal } from "../../components/DeleteProfileModal/DeleteProfileModal";
 import styles from "./Profile.module.css";
 
 export function ProfilePage() {
@@ -18,12 +19,13 @@ export function ProfilePage() {
     const [sortBy, setSortBy] = useState<"newest" | "oldest" | "likes">("newest");
     const [isLoading, setIsLoading] = useState(true);
     const [userNotFound, setUserNotFound] = useState(false);
-    
+
     // User profile info (fallback to token if own profile, or loaded from posts owner)
     const [profileUser, setProfileUser] = useState<{ username: string; image: string } | null>(null);
 
     const isOwnProfile = currentUser?.username === username;
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [reloadTrigger, setReloadTrigger] = useState(0);
 
     // Deterministic cyberpunk gradient cover generator based on username
@@ -52,8 +54,8 @@ export function ProfilePage() {
             setUserNotFound(false);
             try {
                 // 1. Fetch user's posts
-                const response = await fetch(`http://localhost:3000/post/postUser${username}`);
-                
+                const response = await fetch(`${process.env.URL_API}/post/postUser${username}`);
+
                 if (response.status === 404) {
                     setUserNotFound(true);
                     setIsLoading(false);
@@ -96,7 +98,7 @@ export function ProfilePage() {
 
                     if (localLikedIds.length > 0) {
                         // Fetch all posts to filter the ones we liked
-                        const allResponse = await fetch("http://localhost:3000/post/getAll");
+                        const allResponse = await fetch(`${process.env.URL_API}/post/getAll`);
                         if (allResponse.ok) {
                             const allPosts: PostData[] = await allResponse.json();
                             const filteredLiked = allPosts.filter(p => localLikedIds.includes(p.uuid));
@@ -127,6 +129,18 @@ export function ProfilePage() {
 
         fetchProfileData();
     }, [username, isOwnProfile, reloadTrigger]);
+
+    useEffect(() => {
+        const handlePostChange = () => {
+            setReloadTrigger(prev => prev + 1);
+        };
+        window.addEventListener("post-updated", handlePostChange);
+        window.addEventListener("post-deleted", handlePostChange);
+        return () => {
+            window.removeEventListener("post-updated", handlePostChange);
+            window.removeEventListener("post-deleted", handlePostChange);
+        };
+    }, []);
 
     const handleUpdateSuccess = () => {
         const updatedUser = getUserFromToken();
@@ -201,10 +215,10 @@ export function ProfilePage() {
                     {/* Profile details container */}
                     <div className={styles.headerInfo}>
                         <div className={styles.avatarWrapper}>
-                            <img 
-                                src={avatarSrc} 
-                                alt={username} 
-                                className={styles.avatar} 
+                            <img
+                                src={avatarSrc}
+                                alt={username}
+                                className={styles.avatar}
                                 onError={(e) => {
                                     (e.target as HTMLImageElement).src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${username}`;
                                 }}
@@ -213,8 +227,8 @@ export function ProfilePage() {
                                 <div className={styles.nameSection}>
                                     <h1 className={styles.username}>@{profileUser?.username || username}</h1>
                                     {isOwnProfile && (
-                                        <button 
-                                            className={styles.editProfileBtn} 
+                                        <button
+                                            className={styles.editProfileBtn}
                                             onClick={() => setIsEditModalOpen(true)}
                                             aria-label="Editar Perfil"
                                             title="Editar Perfil"
@@ -235,7 +249,7 @@ export function ProfilePage() {
                     {/* Navigation tabs & filter bar */}
                     <div className={styles.controlBar}>
                         <div className={styles.tabs}>
-                            <button 
+                            <button
                                 className={`${styles.tabBtn} ${activeTab === "posts" ? styles.activeTab : ""}`}
                                 onClick={() => setActiveTab("posts")}
                             >
@@ -243,7 +257,7 @@ export function ProfilePage() {
                                 <span className={styles.countBadge}>{userPosts.length}</span>
                             </button>
                             {isOwnProfile && (
-                                <button 
+                                <button
                                     className={`${styles.tabBtn} ${activeTab === "likes" ? styles.activeTab : ""}`}
                                     onClick={() => setActiveTab("likes")}
                                 >
@@ -255,7 +269,7 @@ export function ProfilePage() {
 
                         <div className={styles.filterGroup}>
                             <label htmlFor="sort-select" className={styles.filterLabel}>Ordenar por</label>
-                            <select 
+                            <select
                                 id="sort-select"
                                 className={styles.sortSelect}
                                 value={sortBy}
@@ -278,8 +292,8 @@ export function ProfilePage() {
                     ) : (
                         <div className={styles.emptyState}>
                             <p className={styles.emptyText}>
-                                {activeTab === "posts" 
-                                    ? (isOwnProfile ? "Você ainda não publicou nenhuma ideia." : "Este usuário ainda não publicou nada.") 
+                                {activeTab === "posts"
+                                    ? (isOwnProfile ? "Você ainda não publicou nenhuma ideia." : "Este usuário ainda não publicou nada.")
                                     : "Você ainda não curtiu nenhum post."}
                             </p>
                             {isOwnProfile && activeTab === "posts" && (
@@ -287,13 +301,39 @@ export function ProfilePage() {
                             )}
                         </div>
                     )}
+
+                    {/* Danger zone / Delete Account */}
+                    {isOwnProfile && (
+                        <div className={styles.dangerZone}>
+                            <button
+                                className={styles.deleteProfileBtn}
+                                onClick={() => setIsDeleteModalOpen(true)}
+                                aria-label="Excluir Conta Permanentemente"
+                                title="Excluir Conta Permanentemente"
+                            >
+                                <svg className={styles.trashIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <polyline points="3 6 5 6 21 6"></polyline>
+                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                    <line x1="10" y1="11" x2="10" y2="17"></line>
+                                    <line x1="14" y1="11" x2="14" y2="17"></line>
+                                </svg>
+                                <span>Excluir Conta Permanentemente</span>
+                            </button>
+                        </div>
+                    )}
                 </div>
             </main>
 
-            <UpdateProfileModal 
-                isOpen={isEditModalOpen} 
-                onClose={() => setIsEditModalOpen(false)} 
+            <UpdateProfileModal
+                isOpen={isEditModalOpen}
+                onClose={() => setIsEditModalOpen(false)}
                 onUpdateSuccess={handleUpdateSuccess}
+            />
+
+            <DeleteProfileModal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                userPosts={userPosts}
             />
         </>
     );

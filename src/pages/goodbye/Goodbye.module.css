@@ -1,0 +1,116 @@
+.container {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(circle at center, #1b0a1a 0%, #0a050a 60%, #000000 100%);
+    padding: 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Abstract digital particles background effect */
+.gridBackground {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        linear-gradient(rgba(255, 82, 82, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 82, 82, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    background-position: center;
+    mask-image: radial-gradient(circle at center, black, transparent 80%);
+    pointer-events: none;
+}
+
+.glitchText {
+    font-size: clamp(3rem, 8vw, 5rem);
+    font-weight: 800;
+    color: #ff5252;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    margin-bottom: 20px;
+    text-shadow: 
+        0 0 10px rgba(255, 82, 82, 0.6),
+        0 0 25px rgba(255, 82, 82, 0.4),
+        0 0 50px rgba(255, 82, 82, 0.2);
+    animation: pulseGlow 3s infinite ease-in-out;
+}
+
+.subtitle {
+    font-size: clamp(1rem, 3vw, 1.25rem);
+    color: #b0a3b0;
+    max-width: 600px;
+    line-height: 1.8;
+    margin: 10px 0 40px 0;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+    animation: fadeInText 2s ease-out forwards;
+}
+
+.poeticText {
+    font-style: italic;
+    color: #887888;
+    margin-bottom: 10px;
+}
+
+.actionBtn {
+    display: inline-block;
+    padding: 14px 28px;
+    border-radius: 30px;
+    border: 1px solid rgba(255, 82, 82, 0.3);
+    background: rgba(255, 82, 82, 0.05);
+    color: #ff8a80;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    animation: fadeInText 3s ease-out forwards;
+}
+
+.actionBtn:hover {
+    background: rgba(255, 82, 82, 0.2);
+    border-color: #ff5252;
+    color: #ffffff;
+    box-shadow: 
+        0 0 15px rgba(255, 82, 82, 0.4),
+        0 4px 20px rgba(255, 82, 82, 0.2);
+    transform: translateY(-2px);
+}
+
+@keyframes pulseGlow {
+    0%, 100% {
+        text-shadow: 
+            0 0 10px rgba(255, 82, 82, 0.6),
+            0 0 25px rgba(255, 82, 82, 0.4),
+            0 0 50px rgba(255, 82, 82, 0.2);
+        opacity: 0.95;
+    }
+    50% {
+        text-shadow: 
+            0 0 15px rgba(255, 82, 82, 0.8),
+            0 0 35px rgba(255, 82, 82, 0.6),
+            0 0 70px rgba(255, 82, 82, 0.3);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInText {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
