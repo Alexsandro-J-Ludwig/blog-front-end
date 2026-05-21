@@ -114,19 +114,23 @@ export function PostCard({ post }: PostCardProps) {
         }
     };
 
+    const hasImage = post.image && post.image.trim() !== "";
+
     return (
-        <article className={styles.card}>
-            <div className={styles.imageWrapper}>
-                <img 
-                    src={post.image} 
-                    alt={post.title} 
-                    className={styles.image}
-                    loading="lazy"
-                    onError={(e) => {
-                        (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=60";
-                    }}
-                />
-            </div>
+        <article className={`${styles.card} ${!hasImage ? styles.noImage : ""}`}>
+            {hasImage && (
+                <div className={styles.imageWrapper}>
+                    <img 
+                        src={post.image} 
+                        alt={post.title} 
+                        className={styles.image}
+                        loading="lazy"
+                        onError={(e) => {
+                            (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=60";
+                        }}
+                    />
+                </div>
+            )}
 
             <div className={styles.content}>
                 <div className={styles.header}>
