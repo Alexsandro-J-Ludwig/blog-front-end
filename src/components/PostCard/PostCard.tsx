@@ -1,4 +1,4 @@
-import { Post } from "../../hooks/usePosts";
+import type { Post } from "../../hooks/usePosts";
 import styles from "./PostCard.module.css";
 
 const DEFAULT_AVATAR = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23888888"><rect width="100%" height="100%" fill="%232c2c2c"/><circle cx="12" cy="8" r="4"/><path d="M12 14c-6.1 0-8 4-8 4v2h16v-2s-1.9-4-8-4z"/></svg>`;

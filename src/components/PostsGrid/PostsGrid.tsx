@@ -1,4 +1,4 @@
-import { Post } from "../../hooks/usePosts";
+import type { Post } from "../../hooks/usePosts";
 import { PostCard } from "../PostCard/PostCard";
 import styles from "./PostsGrid.module.css";
 
