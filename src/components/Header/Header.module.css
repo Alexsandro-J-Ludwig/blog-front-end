@@ -20,21 +20,36 @@ header {
 
 .title {
     color: white;
-    font-family: 'Pacifico', cursive; 
+    font-family: 'Pacifico', cursive;
     font-size: 2rem;
     letter-spacing: 0.5px;
-    text-shadow: 0 0 8px rgba(0, 229, 255, 0.3); 
+    text-shadow: 0 0 8px rgba(0, 229, 255, 0.3);
 }
 
 /* 🛠️ A MÁGICA ACONTECE AQUI */
 .linkCadastro {
-    margin-left: auto; /* Empurra o link e o texto para o lado oposto */
+    margin-left: auto;
+    /* Empurra o link e o texto para o lado oposto */
 }
 
 .textRegister {
     color: white;
-    font-family: 'Pacifico', cursive; 
+    font-family: 'Pacifico', cursive;
     font-size: 0.9rem;
     letter-spacing: 0.5px;
-    text-shadow: 0 0 8px rgba(0, 229, 255, 0.3); 
+    text-shadow: 0 0 8px rgba(0, 229, 255, 0.3);
+}
+
+.avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1.5px solid #00e5ff;
+    box-shadow: 0 0 5px rgba(0, 229, 255, 0.4);
+    transition: transform 0.2s ease;
+}
+
+.avatar:hover {
+    transform: scale(1.1);
 }
