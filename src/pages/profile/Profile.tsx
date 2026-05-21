@@ -4,6 +4,7 @@ import { Header } from "../../components/Header/Header";
 import { PostCard } from "../../components/PostCard/PostCard";
 import { getUserFromToken } from "../../utils/loginVerify";
 import type { PostData } from "../../components/PostCard/PostCard";
+import { UpdateProfileModal } from "../../components/UpdateProfileModal/UpdateProfileModal";
 import styles from "./Profile.module.css";
 
 export function ProfilePage() {
@@ -22,6 +23,8 @@ export function ProfilePage() {
     const [profileUser, setProfileUser] = useState<{ username: string; image: string } | null>(null);
 
     const isOwnProfile = currentUser?.username === username;
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [reloadTrigger, setReloadTrigger] = useState(0);
 
     // Deterministic cyberpunk gradient cover generator based on username
     const getCyberpunkGradient = (name: string) => {
@@ -123,7 +126,18 @@ export function ProfilePage() {
         };
 
         fetchProfileData();
-    }, [username, isOwnProfile]);
+    }, [username, isOwnProfile, reloadTrigger]);
+
+    const handleUpdateSuccess = () => {
+        const updatedUser = getUserFromToken();
+        if (updatedUser) {
+            if (updatedUser.username !== username) {
+                navigate(`/profile/${updatedUser.username}`, { replace: true });
+            } else {
+                setReloadTrigger(prev => prev + 1);
+            }
+        }
+    };
 
     const getSortedPosts = (list: PostData[]) => {
         const sorted = [...list];
@@ -196,7 +210,23 @@ export function ProfilePage() {
                                 }}
                             />
                             <div className={styles.meta}>
-                                <h1 className={styles.username}>@{profileUser?.username || username}</h1>
+                                <div className={styles.nameSection}>
+                                    <h1 className={styles.username}>@{profileUser?.username || username}</h1>
+                                    {isOwnProfile && (
+                                        <button 
+                                            className={styles.editProfileBtn} 
+                                            onClick={() => setIsEditModalOpen(true)}
+                                            aria-label="Editar Perfil"
+                                            title="Editar Perfil"
+                                        >
+                                            <svg className={styles.pencilIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                <path d="M12 20h9"></path>
+                                                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                                            </svg>
+                                            <span>Editar Perfil</span>
+                                        </button>
+                                    )}
+                                </div>
                                 <p className={styles.role}>Membro do BlogU</p>
                             </div>
                         </div>
@@ -259,6 +289,12 @@ export function ProfilePage() {
                     )}
                 </div>
             </main>
+
+            <UpdateProfileModal 
+                isOpen={isEditModalOpen} 
+                onClose={() => setIsEditModalOpen(false)} 
+                onUpdateSuccess={handleUpdateSuccess}
+            />
         </>
     );
 }

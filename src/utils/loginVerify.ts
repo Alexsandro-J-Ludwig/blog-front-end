@@ -26,6 +26,17 @@ export function getUserFromToken(): UserTokenPayload | null {
 
         const tempoReal = Math.floor(Date.now() / 1000);
         if (dadosToken.exp > tempoReal) {
+            const userId = dadosToken.uuid || dadosToken.id;
+            const overrides = localStorage.getItem(`user_override_${userId}`);
+            if (overrides) {
+                try {
+                    const parsedOverrides = JSON.parse(overrides);
+                    if (parsedOverrides.username) dadosToken.username = parsedOverrides.username;
+                    if (parsedOverrides.image) dadosToken.image = parsedOverrides.image;
+                } catch (e) {
+                    console.error("Error applying token overrides:", e);
+                }
+            }
             return dadosToken;
         }
         return null;

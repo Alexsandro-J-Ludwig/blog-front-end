@@ -286,6 +286,42 @@
     100% { transform: rotate(360deg); }
 }
 
+.nameSection {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.editProfileBtn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #e0e0e0;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+    height: fit-content;
+}
+
+.editProfileBtn:hover {
+    background: rgba(0, 229, 255, 0.15);
+    border-color: #00e5ff;
+    color: #00e5ff;
+    box-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
+}
+
+.pencilIcon {
+    width: 14px;
+    height: 14px;
+}
+
 /* Responsiveness overrides */
 @media (max-width: 768px) {
     .cover {
@@ -311,6 +347,10 @@
 
     .meta {
         margin-bottom: 0;
+    }
+
+    .nameSection {
+        justify-content: center;
     }
 
     .username {
