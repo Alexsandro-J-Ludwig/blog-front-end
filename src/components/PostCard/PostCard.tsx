@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { getUserFromToken } from "../../utils/loginVerify";
 import { UpdatePostModal } from "../UpdatePostModal/UpdatePostModal";
 import { DeletePostModal } from "../DeletePostModal/DeletePostModal";
+import { PostViewModal } from "../PostViewModal/PostViewModal";
 import styles from "./PostCard.module.css";
 
 export interface PostOwner {
@@ -36,6 +37,7 @@ export function PostCard({ post }: PostCardProps) {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [isUpdateOpen, setIsUpdateOpen] = useState(false);
     const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+    const [isViewOpen, setIsViewOpen] = useState(false);
 
     // Retrieve logged-in user information
     const user = getUserFromToken();
@@ -244,7 +246,7 @@ export function PostCard({ post }: PostCardProps) {
                         <span className={styles.likeCount}>{likes}</span>
                     </button>
 
-                    <button className={styles.readMoreButton}>
+                    <button className={styles.readMoreButton} onClick={() => setIsViewOpen(true)}>
                         <span>Ler Mais</span>
                         <svg className={styles.arrowIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                             <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -272,6 +274,20 @@ export function PostCard({ post }: PostCardProps) {
                     onClose={() => setIsDeleteOpen(false)}
                     onDeleteSuccess={() => {
                         setIsDeleteOpen(false);
+                    }}
+                />
+            )}
+
+            {isViewOpen && (
+                <PostViewModal
+                    post={post}
+                    isOpen={isViewOpen}
+                    onClose={() => setIsViewOpen(false)}
+                    initialLiked={isLiked}
+                    initialLikes={likes}
+                    onLikesChange={(newLikes, newIsLiked) => {
+                        setLikes(newLikes);
+                        setIsLiked(newIsLiked);
                     }}
                 />
             )}
