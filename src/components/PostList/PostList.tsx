@@ -28,6 +28,15 @@ export function PostList() {
 
     useEffect(() => {
         fetchPosts();
+
+        const handleNewPost = () => {
+            fetchPosts();
+        };
+
+        window.addEventListener("post-created", handleNewPost);
+        return () => {
+            window.removeEventListener("post-created", handleNewPost);
+        };
     }, []);
 
     if (loading) {

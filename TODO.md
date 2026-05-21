@@ -1,9 +1,12 @@
 ## Criar Compoennte - Login
-Voce deve incluir as funcionalidades de cadastrar e logar, a funcionalidade de cadastrar deve apenas criar os dados do usuario no banco de dados, se o usuario nao informar uma foto, vai enviar aquela foto padrao encontrada no perfil de cada  usuario criado na semeacao do banco de dados. Ao realizar o cadastro, o usuario deve ser direcionado para a tela de login, ja com o email no campo para ele, precisando apenas informar a senha. Ao realizar o login, o usuario deve ser direcionado para a tela de menu e o token deve ser armazenado no local storage. Na tela de menu, o header deve exibir o usuario logado, sua foto de perfil, e deve ter um botao de logout que remove o token do local storage e redireciona para a tela de login.
+Voce deve cria um botao ao estilo do BlogU que permita que o usuario crie o seu post, esse botao deve ser de facil visualizacao e deve abrir um modal, dentro do modal o usuario deve poder inserir o titulo do post, o conteudo do post e uma imagem, alem disso, deve ter um botao de cancelar que fecha o modal e um botao de publicar que salva o post no banco de dados, o modal deve ter as seguintes validacoes:
+- O titulo deve ter pelo menos 3 caracteres
+- O conteudo deve ter pelo menos 10 caracteres
+- A imagem deve ser uma imagem valida (nao pode ser .exe, .pdf, .zip, etc)
 
-- API de cadastro: POST /users/create {name, email, password, image}
-- API de login: POST /users/login {email, password}
+- API para criar post: POST /post/create {title, content, image, uuid_user}
 
-- Na pasta utils, existe a funcao loginVerify, que e usada para verificar se o token e valido, e retornar os dados do usuario, caso o token nao seja valido, o usuario deve ser redirecionado para a tela de login. Alem disso, ela garante que o usuario tem acesso valido para as rotas que exigem autenticacao. Como curtir posts
-- Quando o usuario curtir um post, o post deve ser salvo em uma lista de posts curtidos no local storage, e o contador de likes deve ser incrementado em 1. 
-
+### Apenas para lembrar os endpoints ja usados (Nao use estes na minha frente, apenas para estudo)
+- POST http://localhost:3000/users/create {name, email, password, image}
+- POST http://localhost:3000/users/login {email, password}
+- GET http://localhost:3000/post/getAll
