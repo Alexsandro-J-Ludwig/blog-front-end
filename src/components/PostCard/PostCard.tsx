@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { getUserFromToken } from "../../utils/loginVerify";
 import styles from "./PostCard.module.css";
 
@@ -134,7 +134,7 @@ export function PostCard({ post }: PostCardProps) {
 
             <div className={styles.content}>
                 <div className={styles.header}>
-                    <div className={styles.author}>
+                    <Link to={`/profile/${post.owner.username}`} className={styles.authorLink}>
                         <img 
                             src={post.owner.image} 
                             alt={post.owner.username} 
@@ -144,7 +144,7 @@ export function PostCard({ post }: PostCardProps) {
                             }}
                         />
                         <span className={styles.username}>{post.owner.username}</span>
-                    </div>
+                    </Link>
                     <span className={styles.date}>{formatDate(post.date)}</span>
                 </div>
 

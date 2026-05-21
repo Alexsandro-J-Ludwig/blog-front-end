@@ -1,12 +1,13 @@
-## Criar Compoennte - Login
-Voce deve cria um botao ao estilo do BlogU que permita que o usuario crie o seu post, esse botao deve ser de facil visualizacao e deve abrir um modal, dentro do modal o usuario deve poder inserir o titulo do post, o conteudo do post e uma imagem, alem disso, deve ter um botao de cancelar que fecha o modal e um botao de publicar que salva o post no banco de dados, o modal deve ter as seguintes validacoes:
-- O titulo deve ter pelo menos 3 caracteres
-- O conteudo deve ter pelo menos 10 caracteres
-- A imagem deve ser uma imagem valida (nao pode ser .exe, .pdf, .zip, etc)
+## Criar Compoennte - Atualizar perfil
+O sistema deve permitir que o usuario atualize suas informacoes, nome de usuario, email, senha, foto de perfil e capa. A foto de perfil é um caso particular, pois permite que o usuário, possa escolher as imagens padrões de perfil já existentes no sistema, ou enviar uma imagem própria. 
 
-- API para criar post: POST /post/create {title, content, image, uuid_user}
+A opcao de editar perfil deve ser feita no botao de editar perfil no perfil do usuario, o botao deve ter um icone de lapis e  seguir o padrao estabelecido em blogU, ele deve abrir um modal para realizar essa edicao, e o modal deve possuir os mesmos campos do modal de criacao de posts, porem com os valores ja preenchidos com as informacoes do usuario.
+
+- API de atualização dos dados do usuário: PUT http://localhost:3000/users/update {name, email, password, image}
 
 ### Apenas para lembrar os endpoints ja usados (Nao use estes na minha frente, apenas para estudo)
 - POST http://localhost:3000/users/create {name, email, password, image}
 - POST http://localhost:3000/users/login {email, password}
 - GET http://localhost:3000/post/getAll
+- POST http://localhost:3000/post/create {title, content, image, uuid_user}
+- GET http://localhost:3000/post/getByUser/{uuid_user}

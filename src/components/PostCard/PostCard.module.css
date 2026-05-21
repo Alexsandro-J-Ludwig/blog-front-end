@@ -60,6 +60,20 @@
     gap: 10px;
 }
 
+.authorLink {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+}
+
+.authorLink:hover .username {
+    color: #00e5ff;
+    text-shadow: 0 0 8px rgba(0, 229, 255, 0.4);
+}
+
 .avatar {
     width: 32px;
     height: 32px;
