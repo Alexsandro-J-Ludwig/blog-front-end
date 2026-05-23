@@ -7,7 +7,7 @@ declare module '*.module.css' {
 
 declare const process: {
   env: {
-    URL_API: "https://blog-api-itfe.onrender.com";
+    URL_API: "https://blogu.sistemasapi.online";
     [key: string]: string | undefined;
   };
 };
