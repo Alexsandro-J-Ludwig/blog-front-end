@@ -76,7 +76,7 @@ export function PostViewModal({
 
         try {
             const token = localStorage.getItem("token");
-            const response = await fetch(`${process.env.URL_API}/post/${post.uuid}/like`, {
+            const response = await fetch(`http://localhost:3000/post/${post.uuid}/like`, {
                 method: "POST",
                 headers: { Authorization: `Bearer ${token}` },
             });

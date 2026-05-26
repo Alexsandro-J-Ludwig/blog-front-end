@@ -7,7 +7,7 @@ declare module '*.module.css' {
 
 declare const process: {
   env: {
-    URL_API: "https://blogu.sistemasapi.online";
+    URL_API: "http://localhost:3000";
     [key: string]: string | undefined;
   };
 };

@@ -12,7 +12,7 @@ export function PostList() {
         setLoading(true);
         setError(null);
         try {
-            const response = await fetch(`${process.env.URL_API}/post/getAll`);
+            const response = await fetch(`http://localhost:3000/post/getAll`);
             if (!response.ok) {
                 throw new Error("Não foi possível carregar os posts. Tente novamente mais tarde.");
             }
