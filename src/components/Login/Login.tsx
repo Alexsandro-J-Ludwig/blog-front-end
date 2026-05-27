@@ -8,7 +8,7 @@ export function Login() {
     const [activeTab, setActiveTab] = useState<'login' | 'register'>('login');
     const [loginEmail, setLoginEmail] = useState('');
     const [loginPassword, setLoginPassword] = useState('');
-    
+
     const [registerUsername, setRegisterUsername] = useState('');
     const [registerEmail, setRegisterEmail] = useState('');
     const [registerPassword, setRegisterPassword] = useState('');
@@ -33,7 +33,7 @@ export function Login() {
         setIsSubmitting(true);
 
         try {
-            const response = await fetch(`${process.env.URL_API}/users/login`, {
+            const response = await fetch(`http://localhost:3000/users/login`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -50,7 +50,9 @@ export function Login() {
                 throw new Error(data.message || "Email ou senha incorretos");
             }
 
+            // Dispatch global event on successful login to notify header
             localStorage.setItem("token", data.token);
+            window.dispatchEvent(new Event("profile-updated"));
             navigate("/");
         } catch (err: any) {
             console.error(err);
@@ -75,7 +77,7 @@ export function Login() {
                 imageStr = `https://api.dicebear.com/7.x/avataaars/svg?seed=${registerUsername}`;
             }
 
-            const response = await fetch(`${process.env.URL_API}/users/create`, {
+            const response = await fetch(`http://localhost:3000/users/create`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -119,10 +121,11 @@ export function Login() {
         }
     };
 
+
     return (
         <div className={styles.authContainer}>
             {/* CARD DE LOGIN */}
-            <div 
+            <div
                 className={`${styles.authCard} ${activeTab === 'login' ? styles.maximized : styles.minimized}`}
                 onClick={() => activeTab === 'register' && setActiveTab('login')}
             >
@@ -137,16 +140,16 @@ export function Login() {
                     <div className={styles.titleContainer}>
                         <h2 className={styles.titleText}>Entrar</h2>
                     </div>
-                    
+
                     <div className={styles.formBody}>
                         {errorMsg && activeTab === 'login' && <div className={styles.errorMsg}>{errorMsg}</div>}
                         <div className={styles.inputGroup}>
                             <label htmlFor="login-email" className={styles.label}>E-mail</label>
-                            <input 
+                            <input
                                 id="login-email"
-                                type="email" 
+                                type="email"
                                 className={styles.input}
-                                placeholder="Digite seu e-mail" 
+                                placeholder="Digite seu e-mail"
                                 value={loginEmail}
                                 onChange={(e) => setLoginEmail(e.target.value)}
                                 required
@@ -157,11 +160,11 @@ export function Login() {
 
                         <div className={styles.inputGroup}>
                             <label htmlFor="login-password" className={styles.label}>Senha</label>
-                            <input 
+                            <input
                                 id="login-password"
-                                type="password" 
+                                type="password"
                                 className={styles.input}
-                                placeholder="Digite sua senha" 
+                                placeholder="Digite sua senha"
                                 value={loginPassword}
                                 onChange={(e) => setLoginPassword(e.target.value)}
                                 required
@@ -196,7 +199,7 @@ export function Login() {
             </div>
 
             {/* CARD DE CADASTRO */}
-            <div 
+            <div
                 className={`${styles.authCard} ${activeTab === 'register' ? styles.maximized : styles.minimized}`}
                 onClick={() => activeTab === 'login' && setActiveTab('register')}
             >
@@ -211,16 +214,16 @@ export function Login() {
                     <div className={styles.titleContainer}>
                         <h2 className={styles.titleText}>Cadastrar</h2>
                     </div>
-                    
+
                     <div className={styles.formBody}>
                         {errorMsg && activeTab === 'register' && <div className={styles.errorMsg}>{errorMsg}</div>}
                         <div className={styles.inputGroup}>
                             <label htmlFor="reg-username" className={styles.label}>Nome de Usuário</label>
-                            <input 
+                            <input
                                 id="reg-username"
-                                type="text" 
+                                type="text"
                                 className={styles.input}
-                                placeholder="Escolha seu usuário" 
+                                placeholder="Escolha seu usuário"
                                 value={registerUsername}
                                 onChange={(e) => setRegisterUsername(e.target.value)}
                                 required
@@ -231,11 +234,11 @@ export function Login() {
 
                         <div className={styles.inputGroup}>
                             <label htmlFor="reg-email" className={styles.label}>E-mail</label>
-                            <input 
+                            <input
                                 id="reg-email"
-                                type="email" 
+                                type="email"
                                 className={styles.input}
-                                placeholder="Digite seu e-mail" 
+                                placeholder="Digite seu e-mail"
                                 value={registerEmail}
                                 onChange={(e) => setRegisterEmail(e.target.value)}
                                 required
@@ -246,11 +249,11 @@ export function Login() {
 
                         <div className={styles.inputGroup}>
                             <label htmlFor="reg-password" className={styles.label}>Senha</label>
-                            <input 
+                            <input
                                 id="reg-password"
-                                type="password" 
+                                type="password"
                                 className={styles.input}
-                                placeholder="Crie uma senha" 
+                                placeholder="Crie uma senha"
                                 value={registerPassword}
                                 onChange={(e) => setRegisterPassword(e.target.value)}
                                 required
@@ -262,9 +265,9 @@ export function Login() {
                         <div className={styles.inputGroup}>
                             <label htmlFor="reg-profile" className={styles.label}>Foto de Perfil (Opcional)</label>
                             <div className={styles.fileInputContainer} onClick={(e) => e.stopPropagation()}>
-                                <input 
+                                <input
                                     id="reg-profile"
-                                    type="file" 
+                                    type="file"
                                     accept="image/*"
                                     className={styles.fileInput}
                                     onChange={handleFileChange}

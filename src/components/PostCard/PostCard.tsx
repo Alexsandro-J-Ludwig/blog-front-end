@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { getUserFromToken } from "../../utils/loginVerify";
 import { UpdatePostModal } from "../UpdatePostModal/UpdatePostModal";
@@ -27,7 +27,7 @@ interface PostCardProps {
     post: PostData;
 }
 
-export function PostCard({ post }: PostCardProps) {
+function PostCardComponent({ post }: PostCardProps) {
     const navigate = useNavigate();
     const [likes, setLikes] = useState(post.likes);
     const [isLiked, setIsLiked] = useState(false);
@@ -87,7 +87,7 @@ export function PostCard({ post }: PostCardProps) {
 
         try {
             const token = localStorage.getItem("token");
-            const response = await fetch(`${process.env.URL_API}/post/${post.uuid}/like`, {
+            const response = await fetch(`http://localhost:3000/post/${post.uuid}/like`, {
                 method: "POST",
                 headers: {
                     "Authorization": `Bearer ${token}`
@@ -294,3 +294,13 @@ export function PostCard({ post }: PostCardProps) {
         </>
     );
 }
+
+export const PostCard = React.memo(PostCardComponent, (prevProps, nextProps) => {
+    return prevProps.post.uuid === nextProps.post.uuid &&
+           prevProps.post.likes === nextProps.post.likes &&
+           prevProps.post.title === nextProps.post.title &&
+           prevProps.post.describe === nextProps.post.describe &&
+           prevProps.post.image === nextProps.post.image &&
+           prevProps.post.owner.username === nextProps.post.owner.username &&
+           prevProps.post.owner.image === nextProps.post.owner.image;
+});

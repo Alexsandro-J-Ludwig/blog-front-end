@@ -81,8 +81,8 @@ export function CreatePostModal({ isOpen, onClose }: CreatePostModalProps) {
             setToast({ message: "O título é muito curto (mínimo de 5 caracteres).", type: "error" });
             return;
         }
-        if (title.trim().length > 100) {
-            setToast({ message: "O título é muito longo (máximo de 100 caracteres).", type: "error" });
+        if (title.trim().length > 150) {
+            setToast({ message: "O título é muito longo (máximo de 150 caracteres).", type: "error" });
             return;
         }
 
@@ -91,8 +91,8 @@ export function CreatePostModal({ isOpen, onClose }: CreatePostModalProps) {
             setToast({ message: "A descrição deve ter pelo menos 2 caracteres.", type: "error" });
             return;
         }
-        if (describe.trim().length > 500) {
-            setToast({ message: "A descrição é muito longa (máximo de 500 caracteres).", type: "error" });
+        if (describe.trim().length > 1500) {
+            setToast({ message: "A descrição é muito longa (máximo de 1500 caracteres).", type: "error" });
             return;
         }
 
@@ -102,7 +102,7 @@ export function CreatePostModal({ isOpen, onClose }: CreatePostModalProps) {
             const imageBase64 = imageFile ? await fileToBase64(imageFile) : "";
             const token = localStorage.getItem("token");
 
-            const response = await fetch(`${process.env.URL_API}/post/create`, {
+            const response = await fetch(`http://localhost:3000/post/create`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

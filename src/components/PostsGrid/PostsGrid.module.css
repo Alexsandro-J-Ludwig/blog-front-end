@@ -1,0 +1,11 @@
+.postsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 30px;
+}
+
+@media (max-width: 768px) {
+    .postsGrid {
+        grid-template-columns: 1fr;
+    }
+}

@@ -151,7 +151,7 @@ export function UpdateProfileModal({ isOpen, onClose, onUpdateSuccess }: UpdateP
             if (hasImageChanged) payload.image = selectedImage;
 
             const token = localStorage.getItem("token");
-            const response = await fetch(`${process.env.URL_API}/users/update`, {
+            const response = await fetch(`http://localhost:3000/users/update`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",

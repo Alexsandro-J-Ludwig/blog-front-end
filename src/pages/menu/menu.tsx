@@ -1,13 +1,16 @@
 import { Header } from "../../components/Header/Header";
+import { WelcomeSection } from "../../components/WelcomeSection/WelcomeSection";
 import { PostList } from "../../components/PostList/PostList";
+import styles from "./menu.module.css";
 
 export function Main() {
     return (
-        <>
+        <div className={styles.container}>
             <Header />
-            <main style={{ minHeight: "calc(100vh - 70px)", background: "radial-gradient(circle at 50% 50%, #1e1e1e 0%, #121212 100%)" }}>
+            <main className={styles.mainContent}>
+                <WelcomeSection />
                 <PostList />
             </main>
-        </>
+        </div>
     );
 }

@@ -1,0 +1,25 @@
+.welcomeSection {
+    text-align: center;
+    padding: 20px 0;
+}
+
+.welcomeTitle {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 10px;
+    letter-spacing: -0.5px;
+    text-shadow: 0 0 15px rgba(0, 229, 255, 0.2);
+}
+
+.welcomeSubtitle {
+    color: #888888;
+    font-size: 1.1rem;
+    font-weight: 400;
+}
+
+@media (max-width: 768px) {
+    .welcomeTitle {
+        font-size: 2rem;
+    }
+}

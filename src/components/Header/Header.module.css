@@ -26,10 +26,8 @@ header {
     text-shadow: 0 0 8px rgba(0, 229, 255, 0.3);
 }
 
-/* 🛠️ A MÁGICA ACONTECE AQUI */
 .linkCadastro {
     margin-left: auto;
-    /* Empurra o link e o texto para o lado oposto */
 }
 
 .textRegister {

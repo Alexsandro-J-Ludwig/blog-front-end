@@ -126,7 +126,7 @@ export function UpdatePostModal({ post, isOpen, onClose, onUpdateSuccess }: Upda
 
             // PUT ${process.env.URL_API}/post/alterPost{uuidPost}
             // Note: no slash between alterPost and post.uuid
-            const response = await fetch(`${process.env.URL_API}/post/alterPost${post.uuid}`, {
+            const response = await fetch(`http://localhost:3000/post/alterPost/${post.uuid}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",

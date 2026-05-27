@@ -50,7 +50,7 @@ export function DeletePostModal({ post, isOpen, onClose, onDeleteSuccess }: Dele
         }
 
         try {
-            const response = await fetch(`${process.env.URL_API}/post/${post.uuid}`, {
+            const response = await fetch(`http://localhost:3000/post/${post.uuid}`, {
                 method: "DELETE",
                 headers: {
                     "Authorization": `Bearer ${token}`

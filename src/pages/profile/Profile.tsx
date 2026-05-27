@@ -54,7 +54,7 @@ export function ProfilePage() {
             setUserNotFound(false);
             try {
                 // 1. Fetch user's posts
-                const response = await fetch(`${process.env.URL_API}/post/postUser${username}`);
+                const response = await fetch(`http://localhost:3000/post/postUser${username}`);
 
                 if (response.status === 404) {
                     setUserNotFound(true);
@@ -98,7 +98,7 @@ export function ProfilePage() {
 
                     if (localLikedIds.length > 0) {
                         // Fetch all posts to filter the ones we liked
-                        const allResponse = await fetch(`${process.env.URL_API}/post/getAll`);
+                        const allResponse = await fetch(`http://localhost:3000/post/getAll`);
                         if (allResponse.ok) {
                             const allPosts: PostData[] = await allResponse.json();
                             const filteredLiked = allPosts.filter(p => localLikedIds.includes(p.uuid));
