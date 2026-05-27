@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './Login.module.css';
+import { Toast } from '../Toast/Toast';
 
 export function Login() {
     const navigate = useNavigate();
@@ -13,96 +14,104 @@ export function Login() {
     const [registerPassword, setRegisterPassword] = useState('');
     const [profilePic, setProfilePic] = useState<File | null>(null);
 
-    const [loading, setLoading] = useState(false);
-    const [status, setStatus] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [errorMsg, setErrorMsg] = useState<string | null>(null);
+    const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+
+    const fileToBase64 = (file: File): Promise<string> => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result as string);
+            reader.onerror = error => reject(error);
+        });
+    };
 
     const handleLoginSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setLoading(true);
-        setStatus(null);
+        setErrorMsg(null);
+        setIsSubmitting(true);
+
         try {
-            const response = await fetch('http://localhost:3000/users/login', {
-                method: 'POST',
+            const response = await fetch(`http://localhost:3000/users/login`, {
+                method: "POST",
                 headers: {
-                    'Content-Type': 'application/json',
+                    "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
                     email: loginEmail,
-                    password: loginPassword,
-                }),
+                    password: loginPassword
+                })
             });
 
             const data = await response.json();
 
             if (!response.ok) {
-                throw new Error(data.message || 'Erro ao realizar login. Verifique suas credenciais.');
+                throw new Error(data.message || "Email ou senha incorretos");
             }
 
-            localStorage.setItem('token', data.token);
-            setStatus({ type: 'success', text: 'Login realizado com sucesso! Redirecionando...' });
-
-            setTimeout(() => {
-                navigate('/');
-            }, 1000);
+            // Dispatch global event on successful login to notify header
+            localStorage.setItem("token", data.token);
+            window.dispatchEvent(new Event("profile-updated"));
+            navigate("/");
         } catch (err: any) {
-            setStatus({ type: 'error', text: err.message || 'Erro ao realizar login' });
+            console.error(err);
+            const msg = err.message || "Erro ao conectar com o servidor.";
+            setErrorMsg(msg);
+            setToast({ message: msg, type: "error" });
         } finally {
-            setLoading(false);
+            setIsSubmitting(false);
         }
     };
 
     const handleRegisterSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setLoading(true);
-        setStatus(null);
+        setErrorMsg(null);
+        setIsSubmitting(true);
+
         try {
-            let base64Image = '';
+            let imageStr = "";
             if (profilePic) {
-                base64Image = await new Promise<string>((resolve, reject) => {
-                    const reader = new FileReader();
-                    reader.readAsDataURL(profilePic);
-                    reader.onload = () => resolve(reader.result as string);
-                    reader.onerror = error => reject(error);
-                });
+                imageStr = await fileToBase64(profilePic);
+            } else {
+                imageStr = `https://api.dicebear.com/7.x/avataaars/svg?seed=${registerUsername}`;
             }
 
-            const response = await fetch('http://localhost:3000/users/create', {
-                method: 'POST',
+            const response = await fetch(`http://localhost:3000/users/create`, {
+                method: "POST",
                 headers: {
-                    'Content-Type': 'application/json',
+                    "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
                     username: registerUsername,
                     email: registerEmail,
                     password: registerPassword,
-                    image: base64Image || undefined,
-                }),
+                    image: imageStr
+                })
             });
 
             const data = await response.json();
 
             if (!response.ok) {
-                throw new Error(data.message || 'Erro ao realizar cadastro.');
+                throw new Error(data.message || "Falha ao realizar cadastro");
             }
 
-            setStatus({ type: 'success', text: 'Cadastro realizado com sucesso! Redirecionando para login...' });
-
-            // Clear register fields
-            setRegisterUsername('');
-            setRegisterEmail('');
-            setRegisterPassword('');
-            setProfilePic(null);
-
-            // Switch to login tab and prefill email
+            setToast({ message: "Cadastro realizado com sucesso! Faça login para continuar.", type: "success" });
             setLoginEmail(registerEmail);
-            setTimeout(() => {
-                setActiveTab('login');
-                setStatus(null);
-            }, 2000);
+            setLoginPassword("");
+            setActiveTab("login");
+            
+            setRegisterUsername("");
+            setRegisterEmail("");
+            setRegisterPassword("");
+            setProfilePic(null);
         } catch (err: any) {
-            setStatus({ type: 'error', text: err.message || 'Erro ao realizar cadastro' });
+            console.error(err);
+            const msg = err.message || "Erro ao cadastrar.";
+            setErrorMsg(msg);
+            setToast({ message: msg, type: "error" });
         } finally {
-            setLoading(false);
+            setIsSubmitting(false);
         }
     };
 
@@ -133,12 +142,7 @@ export function Login() {
                     </div>
 
                     <div className={styles.formBody}>
-                        {status && activeTab === 'login' && (
-                            <div className={`${styles.statusMessage} ${status.type === 'success' ? styles.success : styles.error}`}>
-                                {status.type === 'success' ? '✅' : '❌'} {status.text}
-                            </div>
-                        )}
-
+                        {errorMsg && activeTab === 'login' && <div className={styles.errorMsg}>{errorMsg}</div>}
                         <div className={styles.inputGroup}>
                             <label htmlFor="login-email" className={styles.label}>E-mail</label>
                             <input
@@ -149,7 +153,7 @@ export function Login() {
                                 value={loginEmail}
                                 onChange={(e) => setLoginEmail(e.target.value)}
                                 required
-                                disabled={activeTab !== 'login' || loading}
+                                disabled={activeTab !== 'login' || isSubmitting}
                                 onClick={(e) => e.stopPropagation()}
                             />
                         </div>
@@ -164,28 +168,27 @@ export function Login() {
                                 value={loginPassword}
                                 onChange={(e) => setLoginPassword(e.target.value)}
                                 required
-                                disabled={activeTab !== 'login' || loading}
+                                disabled={activeTab !== 'login' || isSubmitting}
                                 onClick={(e) => e.stopPropagation()}
                             />
                         </div>
 
                         <div className={styles.buttonGroup}>
-                            <button
-                                type="submit"
-                                className={styles.primaryBtn}
-                                disabled={activeTab !== 'login' || loading}
+                            <button 
+                                type="submit" 
+                                className={styles.primaryBtn} 
+                                disabled={activeTab !== 'login' || isSubmitting}
                                 onClick={(e) => e.stopPropagation()}
                             >
-                                {loading ? 'Entrando...' : 'Entrar'}
+                                {isSubmitting ? "Entrando..." : "Entrar"}
                             </button>
-                            <button
-                                type="button"
-                                className={styles.secondaryBtn}
-                                disabled={activeTab !== 'login' || loading}
+                            <button 
+                                type="button" 
+                                className={styles.secondaryBtn} 
+                                disabled={activeTab !== 'login' || isSubmitting}
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     setActiveTab('register');
-                                    setStatus(null);
                                 }}
                             >
                                 Criar Conta
@@ -213,12 +216,7 @@ export function Login() {
                     </div>
 
                     <div className={styles.formBody}>
-                        {status && activeTab === 'register' && (
-                            <div className={`${styles.statusMessage} ${status.type === 'success' ? styles.success : styles.error}`}>
-                                {status.type === 'success' ? '✅' : '❌'} {status.text}
-                            </div>
-                        )}
-
+                        {errorMsg && activeTab === 'register' && <div className={styles.errorMsg}>{errorMsg}</div>}
                         <div className={styles.inputGroup}>
                             <label htmlFor="reg-username" className={styles.label}>Nome de Usuário</label>
                             <input
@@ -229,7 +227,7 @@ export function Login() {
                                 value={registerUsername}
                                 onChange={(e) => setRegisterUsername(e.target.value)}
                                 required
-                                disabled={activeTab !== 'register' || loading}
+                                disabled={activeTab !== 'register' || isSubmitting}
                                 onClick={(e) => e.stopPropagation()}
                             />
                         </div>
@@ -244,7 +242,7 @@ export function Login() {
                                 value={registerEmail}
                                 onChange={(e) => setRegisterEmail(e.target.value)}
                                 required
-                                disabled={activeTab !== 'register' || loading}
+                                disabled={activeTab !== 'register' || isSubmitting}
                                 onClick={(e) => e.stopPropagation()}
                             />
                         </div>
@@ -259,7 +257,7 @@ export function Login() {
                                 value={registerPassword}
                                 onChange={(e) => setRegisterPassword(e.target.value)}
                                 required
-                                disabled={activeTab !== 'register' || loading}
+                                disabled={activeTab !== 'register' || isSubmitting}
                                 onClick={(e) => e.stopPropagation()}
                             />
                         </div>
@@ -273,7 +271,7 @@ export function Login() {
                                     accept="image/*"
                                     className={styles.fileInput}
                                     onChange={handleFileChange}
-                                    disabled={activeTab !== 'register' || loading}
+                                    disabled={activeTab !== 'register' || isSubmitting}
                                 />
                                 <span className={styles.fileInputLabel}>
                                     {profilePic ? profilePic.name : 'Selecionar imagem...'}
@@ -282,22 +280,21 @@ export function Login() {
                         </div>
 
                         <div className={styles.buttonGroup}>
-                            <button
-                                type="submit"
-                                className={styles.primaryBtn}
-                                disabled={activeTab !== 'register' || loading}
+                            <button 
+                                type="submit" 
+                                className={styles.primaryBtn} 
+                                disabled={activeTab !== 'register' || isSubmitting}
                                 onClick={(e) => e.stopPropagation()}
                             >
-                                {loading ? 'Cadastrando...' : 'Cadastrar'}
+                                {isSubmitting ? "Cadastrando..." : "Cadastrar"}
                             </button>
-                            <button
-                                type="button"
-                                className={styles.secondaryBtn}
-                                disabled={activeTab !== 'register' || loading}
+                            <button 
+                                type="button" 
+                                className={styles.secondaryBtn} 
+                                disabled={activeTab !== 'register' || isSubmitting}
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     setActiveTab('login');
-                                    setStatus(null);
                                 }}
                             >
                                 Já tenho conta
@@ -306,6 +303,13 @@ export function Login() {
                     </div>
                 </form>
             </div>
+            {toast && (
+                <Toast 
+                    message={toast.message} 
+                    type={toast.type} 
+                    onClose={() => setToast(null)} 
+                />
+            )}
         </div>
     );
 }

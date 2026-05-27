@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: ./blog-api 
+      dockerfile: Dockerfile
+    container_name: blogu-api
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: "postgresql://postgres:sua_senha_secreta@postgres-db:5432/blogu_db"
+      JWT_SECRET: "seu_jwt_secret_aqui"
+    depends_on:
+      - postgres-db
+
+  frontend:
+    build:
+      context: ./blog-front-end
+      dockerfile: Dockerfile
+    container_name: blogu-frontend
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - api
+
+volumes:
+  postgres_data:

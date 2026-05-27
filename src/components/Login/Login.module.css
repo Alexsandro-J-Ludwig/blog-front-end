@@ -347,3 +347,15 @@
         display: none;
     }
 }
+
+.errorMsg {
+    background: rgba(255, 82, 82, 0.15);
+    border: 1px solid rgba(255, 82, 82, 0.3);
+    color: #ff5252;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    text-align: center;
+    margin-bottom: 10px;
+}

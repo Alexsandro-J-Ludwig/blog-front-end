@@ -8,17 +8,14 @@ interface PostsGridProps {
     onLike: (postUuid: string) => void;
 }
 
-export function PostsGrid({ posts, likedPostIds, onLike }: PostsGridProps) {
+export function PostsGrid({ posts }: PostsGridProps) {
     return (
         <div className={styles.postsGrid}>
             {posts.map((post) => {
-                const isLiked = likedPostIds.includes(post.uuid);
                 return (
                     <PostCard
                         key={post.uuid}
-                        post={post}
-                        isLiked={isLiked}
-                        onLike={onLike}
+                        post={post as any}
                     />
                 );
             })}

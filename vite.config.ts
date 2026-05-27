@@ -8,4 +8,7 @@ export default defineConfig({
     react(),
     babel({ presets: [reactCompilerPreset()] })
   ],
+  define: {
+    'process.env.URL_API': JSON.stringify(process.env.URL_API || 'https://blogU.sistemasapi.online')
+  }
 })
