@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { getUserFromToken } from "../../utils/loginVerify";
 import type { PostData } from "../PostCard/PostCard";
+import { CommentsSection } from "../Comments/CommentsSection";
 import styles from "./PostViewModal.module.css";
 
 interface PostViewModalProps {
@@ -210,6 +211,9 @@ export function PostViewModal({
                             </span>
                         </button>
                     </div>
+
+                    {/* Seção de Comentários */}
+                    <CommentsSection postUuid={post.uuid} />
                 </div>
             </div>
         </div>

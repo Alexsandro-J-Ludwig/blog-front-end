@@ -45,6 +45,10 @@ export function getUserFromToken(): UserTokenPayload | null {
     }
 }
 
+export function getCurrentUser(): UserTokenPayload | null {
+    return getUserFromToken();
+}
+
 export function loginVerify(): boolean {
     return getUserFromToken() !== null;
 }

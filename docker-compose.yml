@@ -1,30 +1,45 @@
-version: '3.8'
-
 services:
+  postgres-db:
+    image: postgres:15-alpine
+    container_name: blogu-db
+    restart: always
+    environment:
+      POSTGRES_USER: #Seu usuário do banco aqui
+      POSTGRES_PASSWORD: #Sua senha do banco aqui  
+      POSTGRES_DB: #Nome do banco de dados aqui
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data_v2:/var/lib/postgresql/data
+
   api:
     build:
-      context: ./blog-api 
+      context: ../blog-api   
       dockerfile: Dockerfile
     container_name: blogu-api
     restart: always
     ports:
-      - "3000:3000"
+      - "3000:3000"  
     environment:
-      DATABASE_URL: "postgresql://postgres:sua_senha_secreta@postgres-db:5432/blogu_db"
-      JWT_SECRET: "seu_jwt_secret_aqui"
+      DB_HOST: postgres-db
+      DB_PORT: 5432
+      DB_USERNAME: #Seu usuário do banco aqui
+      DB_PASSWORD: #Sua senha do banco aqui   
+      DB_NAME: #Nome do banco de dados aqui
+      PORT: 3000   
     depends_on:
       - postgres-db
 
   frontend:
     build:
-      context: ./blog-front-end
+      context: .       
       dockerfile: Dockerfile
     container_name: blogu-frontend
     restart: always
     ports:
-      - "80:80"
+      - "5173:80"
     depends_on:
       - api
 
 volumes:
-  postgres_data:
+  postgres_data_v2:
